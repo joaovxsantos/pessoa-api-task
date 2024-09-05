@@ -1,11 +1,14 @@
 FROM ubuntu:latest AS build
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-COPY . .
+RUN apt-get update && apt-get install openjdk-17-jdk -y
 
 RUN apt-get install maven -y
-RUN mvn -f /pessoa-api/pom.xml clean install -Dmaven.test.skip=true
+
+WORKDIR /pessoa-api
+
+COPY . /pessoa-api
+
+RUN mvn clean install -Dmaven.test.skip=true
 
 FROM openjdk:17-jdk-slim
 
